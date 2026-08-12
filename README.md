@@ -4,7 +4,7 @@ A lightweight, self-hosted network anomaly detection tool — a small,
 transparent take on what Cisco Stealthwatch does: ingest real NetFlow from
 your network, score every flow through multiple detection lenses, and
 surface prioritized alerts instead of raw noise.
-
+I wanted to build something that is mostly related to cisco secure analytics which was also known stealth watch .
 Unlike a sandbox/demo, this one is wired to receive **real flow exports**
 from your router, switch, or firewall. No agents on endpoints required —
 NetFlow is exported by whatever device already sees your traffic.
