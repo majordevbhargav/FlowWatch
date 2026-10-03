@@ -1,44 +1,52 @@
 # FlowWatch
 
-A lightweight, self-hosted network observability and anomaly-detection platform built around NetFlow.
+> **Self-hosted NetFlow observability and context-aware network anomaly detection.**
 
-FlowWatch explores how raw network telemetry can be enriched with **device context, network roles, and asset risk** to produce more useful security signals.
+FlowWatch explores how raw network telemetry can become useful security intelligence by combining **traffic behaviour, device context, network roles, asset criticality, and risk scoring**.
+
+![Status](https://img.shields.io/badge/status-active%20development-informational)
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![NetFlow](https://img.shields.io/badge/telemetry-NetFlow-green)
 
 ## Why I Built It
 
-While learning about Cisco Secure Network Analytics / Stealthwatch, I wanted to understand the engineering ideas behind turning network flows into prioritized security information.
+While studying Cisco Secure Network Analytics / Stealthwatch, I wanted to understand the engineering problem behind turning large volumes of network flows into a small number of useful security signals.
 
-FlowWatch is my practical exploration of that problem.
+FlowWatch is my practical exploration of that problem, starting with traffic-only detection and progressively adding context and risk.
+
+## Detection Pipeline
+
+```text
+NetFlow
+   │
+   ▼
+Collection
+   │
+   ▼
+Traffic Features ──────┐
+   │                   │
+   ▼                   ▼
+Traffic Detection   Context Enrichment
+                       │
+                       ├── Device identity
+                       ├── VLAN / network role
+                       ├── Destination familiarity
+                       └── Asset criticality
+                              │
+                              ▼
+                         Risk Scoring
+                              │
+                              ▼
+                    Dashboard / REST API
+```
 
 ## Detection Model
 
-| Engine | What it uses | Purpose |
+| Engine | Inputs | Purpose |
 |---|---|---|
-| Traffic-Only | Packets, bytes, duration, rate | Find unusual traffic behaviour |
-| Context-Aware | Traffic + device/network context | Identify policy and behavioural anomalies |
-| Risk-Informed | Traffic + context + asset criticality | Prioritize findings with a 0-100 risk score |
-
-## Architecture
-
-```text
-Router / Switch / Firewall
-          |
-          | NetFlow v5
-          v
-     FlowWatch Collector
-          |
-     +----+----+
-     |    |    |
- Traffic Context Risk
-     |    |    |
-     +----+----+
-          |
-          v
-       Storage
-          |
-          v
-      Dashboard
-```
+| **Traffic-Only** | Packets, bytes, duration, rate | Detect unusual traffic behaviour |
+| **Context-Aware** | Traffic + device/network context | Detect behavioural and policy anomalies |
+| **Risk-Informed** | Traffic + context + asset criticality | Prioritize findings with a 0-100 risk score |
 
 ## Current Capabilities
 
@@ -50,6 +58,7 @@ Router / Switch / Firewall
 - Inventory-based context
 - Dashboard and REST API
 - Replay tooling for controlled lab testing
+- Detection scenarios for normal traffic, DoS-like behaviour, and port scanning
 
 ## Quick Start
 
@@ -58,13 +67,9 @@ pip install -r requirements.txt
 python3 backend/app.py
 ```
 
-Open:
+Open `http://127.0.0.1:5000`.
 
-```text
-http://127.0.0.1:5000
-```
-
-For lab testing:
+For controlled lab replay:
 
 ```bash
 python3 tools/replay_generator.py --scenario normal
@@ -82,33 +87,29 @@ python3 tools/replay_generator.py --scenario portscan
 | `/api/inventory` | GET | Network context |
 | `/api/inventory/reload` | POST | Reload inventory |
 
-## What I Am Learning
+## Engineering Focus
 
-This project connects networking with software engineering and security:
+This project connects four areas I am actively developing:
 
-- NetFlow and network telemetry
-- Anomaly detection
-- Python backend development
-- Security analytics
-- Risk modelling
-- Network context enrichment
-- Defensive monitoring
+- Enterprise networking and NetFlow telemetry
+- Python backend engineering
+- Defensive security analytics
+- Context-aware anomaly and risk modelling
 
-## Next Steps
+## Roadmap
 
 - NetFlow v9 / IPFIX
-- Better baseline learning
-- PostgreSQL / TimescaleDB
-- Alerting
-- More Cisco integrations
-- Detection evaluation with real lab baselines
+- Stronger baseline learning
+- PostgreSQL / TimescaleDB persistence
+- Alerting and notification workflows
+- Additional Cisco integrations
+- Detection evaluation against repeatable lab baselines
 
 ## Security
 
-Use FlowWatch only on networks you own or are explicitly authorized to monitor. Keep real infrastructure data and credentials out of the repository.
+Use FlowWatch only on networks and telemetry you own or are explicitly authorized to monitor. Keep credentials and real infrastructure data outside the repository.
 
 ## Author
 
-**Dev Bhargav**
-
+**Dev Bhargav**  
 [GitHub](https://github.com/majordevbhargav) · [LinkedIn](https://www.linkedin.com/in/devbhargav100)
