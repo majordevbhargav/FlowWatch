@@ -2,6 +2,8 @@
 
 > **Self-hosted NetFlow observability and context-aware network anomaly detection.**
 
+![FLOWWATCH project banner](./assets/flowwatch-banner.svg)
+
 FlowWatch explores how raw network telemetry can become useful security intelligence by combining **traffic behaviour, device context, network roles, asset criticality, and risk scoring**.
 
 ![Status](https://img.shields.io/badge/status-active%20development-informational)
