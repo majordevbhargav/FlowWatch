@@ -73,7 +73,13 @@ def parse_packet(data: bytes):
     version, count, sys_uptime, unix_secs, unix_nsecs, flow_seq, eng_type, eng_id, sampling = (
         struct.unpack(HEADER_FMT, data[:HEADER_LEN])
     )
-    if version != 5:
+    if version != 5 or count > 30:
+        return []
+
+    # A v5 datagram must contain every record declared in its header.
+    # Reject truncated packets instead of silently processing a partial batch.
+    expected_length = HEADER_LEN + count * RECORD_LEN
+    if len(data) < expected_length:
         return []
 
     flows = []
