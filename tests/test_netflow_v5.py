@@ -13,6 +13,19 @@ class NetFlowV5ParserTests(unittest.TestCase):
         )
         self.assertEqual(parse_packet(header), [])
 
+
+    def test_rejects_truncated_declared_record(self):
+        import struct
+
+        header = struct.pack(HEADER_FMT, 5, 1, 1000, 1_700_000_000, 0, 7, 0, 0, 0)
+        self.assertEqual(parse_packet(header), [])
+
+    def test_rejects_record_count_above_protocol_limit(self):
+        import struct
+
+        header = struct.pack(HEADER_FMT, 5, 31, 1000, 1_700_000_000, 0, 7, 0, 0, 0)
+        self.assertEqual(parse_packet(header), [])
+
     def test_parses_one_v5_flow_record(self):
         import struct
 
