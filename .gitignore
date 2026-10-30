@@ -3,3 +3,13 @@ __pycache__/
 backend/flowwatch.db
 .venv/
 *.log
+
+# SQLite runtime and journal files
+backend/*.db-journal
+backend/*.db-wal
+backend/*.db-shm
+
+# Test and coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
